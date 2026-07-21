@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIDC SP Capital — Cronograma</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0efe9;color:#1a1a18;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid rgba(0,0,0,.1);padding:0 1.5rem;position:sticky;top:0;z-index:50}
+.topbar-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+.topbar h1{font-size:14px;font-weight:600}
+.topbar p{font-size:11px;color:#777;margin-top:1px}
+.tabs{display:flex}
+.tab{font-size:12px;font-weight:500;padding:0 16px;height:54px;border:none;background:none;color:#999;border-bottom:2px solid transparent;cursor:pointer;transition:all .15s}
+.tab.active{color:#1a1a18;border-bottom-color:#1a1a18}
+.main{max-width:1060px;margin:0 auto;padding:1.5rem}
+.view{display:none}.view.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
+.card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:14px;text-align:center}
+.card .num{font-size:20px;font-weight:600}
+.card .lbl{font-size:11px;color:#888;margin-top:2px}
+.gantt-wrap{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;overflow:hidden}
+.col-headers{display:grid;grid-template-columns:230px 80px repeat(8,1fr);background:#f7f6f2;border-bottom:1px solid rgba(0,0,0,.08);padding:0 14px;gap:3px}
+.col-header-group{display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.col-h-week{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em}
+.col-h-dates{font-size:9px;color:#aaa;margin-top:1px}
+.col-h-label{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;padding:6px 0}
+.gantt-body{padding:10px 14px 14px}
+.grow{display:grid;grid-template-columns:230px 80px repeat(8,1fr);gap:3px;align-items:center;margin-bottom:4px;border-radius:7px;padding:3px 0;transition:background .1s}
+.grow:hover{background:#f7f6f2}
+.gname{font-size:12px;font-weight:600;color:#1a1a18;line-height:1.3}
+.gowner{font-size:11px;color:#777;margin-top:2px;display:flex;align-items:center;gap:4px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.gdead{font-size:11px;font-weight:700;text-align:center;padding:0 2px}
+.gdead.crit{color:#b32c2c}
+.gdead.ok{color:#2e7012}
+.gdead.tbd{color:#aaa;font-style:italic;font-weight:400;font-size:10px}
+.gcell{height:28px;border-radius:3px}
+.gbar{border-radius:3px;height:28px;opacity:.82}
+.gbar-s{border-radius:3px 0 0 3px;height:28px;opacity:.82}
+.gbar-m{border-radius:0;height:28px;opacity:.82}
+.gbar-e{border-radius:0 3px 3px 0;height:28px;opacity:.82}
+.gcheckpoint{height:28px;display:flex;align-items:center;justify-content:center}
+.checkpoint-diamond{width:14px;height:14px;background:#534AB7;transform:rotate(45deg);border-radius:2px}
+.badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:99px;margin-left:3px;font-weight:600}
+.badge-crit{background:#FDECEC;color:#7a1f1f}
+.badge-cp{background:#EDEAFF;color:#3a2f8f}
+.deadline-divider{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:10px 0 4px;margin-top:2px}
+.deadline-divider:first-child{padding-top:2px;margin-top:0}
+.dl-line{flex:1;height:.5px;background:rgba(0,0,0,.1)}
+.dl-label{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:10px;padding:10px 14px;border-top:1px solid rgba(0,0,0,.07);background:#faf9f5}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#777}
+.leg-color{width:14px;height:6px;border-radius:2px}
+.leg-diamond{width:10px;height:10px;background:#534AB7;transform:rotate(45deg);border-radius:1px;flex-shrink:0}
+.prog-wrap{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;padding:10px 16px;margin-bottom:1rem}
+.ptrack{flex:1;height:4px;background:#e5e4e0;border-radius:99px;overflow:hidden}
+.pfill{height:4px;background:#185FA5;border-radius:99px;width:0%;transition:width .3s}
+.plbl{font-size:12px;color:#888;white-space:nowrap}
+.todo-list{display:flex;flex-direction:column;gap:7px}
+.todo-section{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;padding:12px 0 4px;border-top:.5px solid rgba(0,0,0,.1);margin-top:4px}
+.todo-section:first-child{border-top:none;padding-top:0;margin-top:0}
+.todo-card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;overflow:hidden;cursor:pointer;transition:box-shadow .15s}
+.todo-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.todo-accent{height:3px;transition:background .3s}
+.todo-row{display:grid;grid-template-columns:40px 1fr auto auto;align-items:center;padding:12px 16px;gap:12px}
+.todo-num{font-size:18px;font-weight:700;color:#ddd}
+.todo-title{font-size:13px;font-weight:600;color:#1a1a18;line-height:1.3;transition:all .2s}
+.todo-title.done{text-decoration:line-through;color:#bbb}
+.todo-meta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+.owner-tag{display:inline-flex;align-items:center;gap:4px;background:#f0efe9;border-radius:99px;padding:2px 8px;font-size:11px;color:#444}
+.cp-tag{background:#EDEAFF;color:#3a2f8f}
+.todo-dead{font-size:12px;font-weight:700;white-space:nowrap;text-align:right}
+.todo-dead.crit{color:#b32c2c}
+.todo-dead.ok{color:#2e7012}
+.todo-dead.tbd{color:#aaa;font-weight:400;font-style:italic}
+.chkbox{width:22px;height:22px;border:1px solid rgba(0,0,0,.18);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chkbox.done{background:#185FA5;border-color:#185FA5}
+.chkbox svg{display:none}
+.chkbox.done svg{display:block}
+@media(max-width:720px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .main{padding:1rem}
+  .todo-row{grid-template-columns:36px 1fr auto}
+  .chkbox{display:none}
+}
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">JPXVU2JAS6JD-1638468102-3106</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">3bc56e7d-4a8d-4148-8d84-05bae219cb1e</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://solisinvestimentos.sharepoint.com/sites/FS/_layouts/15/DocIdRedir.aspx?ID=JPXVU2JAS6JD-1638468102-3106, JPXVU2JAS6JD-1638468102-3106</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>Cronograma SP Capital — FIDC Fechado R$100MM</h1>
+      <p>60% NC imobiliária · 40% MCMS · Início: 14/07</p>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="show('gantt',this)">Cronograma</button>
+      <button class="tab" onclick="show('todos',this)">To-dos</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="view active" id="v-gantt">
+    <div class="cards" id="cards"></div>
+    <div class="gantt-wrap">
+      <div class="col-headers">
+        <div class="col-h-label">Entregável</div>
+        <div class="col-h-label">Deadline</div>
+        <div class="col-header-group"><div class="col-h-week">S1</div><div class="col-h-dates">14–18/07</div></div>
+        <div class="col-header-group"><div class="col-h-week">S2</div><div class="col-h-dates">21–25/07</div></div>
+        <div class="col-header-group"><div class="col-h-week">S3</div><div class="col-h-dates">28/07–01/08</div></div>
+        <div class="col-header-group"><div class="col-h-week">S4</div><div class="col-h-dates">04–08/08</div></div>
+        <div class="col-header-group"><div class="col-h-week">S5</div><div class="col-h-dates">11–15/08</div></div>
+        <div class="col-header-group"><div class="col-h-week">S6</div><div class="col-h-dates">18–22/08</div></div>
+        <div class="col-header-group"><div class="col-h-week">S7</div><div class="col-h-dates">25–29/08</div></div>
+        <div class="col-header-group"><div class="col-h-week">S8</div><div class="col-h-dates">01/09+</div></div>
+      </div>
+      <div class="gantt-body" id="gantt"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+  <div class="view" id="v-todos">
+    <div class="prog-wrap">
+      <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+      <div class="plbl" id="plbl">0 / 15 concluídos</div>
+    </div>
+    <div class="todo-list" id="todos"></div>
+  </div>
+</div>
+
+<script>
+var C={
+  originacao:'#534AB7',
+  credito:'#185FA5',
+  estruturacao:'#0F6E56',
+  fornecedor:'#854F0B',
+  operacional:'#993556'
+};
+
+// Ordenado por deadline. deadlineOrder: número para ordenação. s/e = semanas 1-8.
+var ITEMS=[
+  // 14/07
+  {id:1,  title:'Escolha do novo analista de crédito',                                                        owner:'Crédito',             area:'credito',      dead:'14/07', dc:'crit', s:1,e:1, checkpoint:false, deadlineGroup:'14/07'},
+  // 22-24/07
+  {id:2,  title:'Estudo safrado da carteira',                                                                  owner:'Vitor',               area:'credito',      dead:'24/07', dc:'ok',   s:1,e:2, checkpoint:false, deadlineGroup:'24/07'},
+  {id:3,  title:'Reunião com Luís — apresentar estudo safrado',                                                owner:'Luís',                area:'originacao',   dead:'24/07', dc:'ok',   s:2,e:2, checkpoint:true,  deadlineGroup:'24/07'},
+  // 31/07
+  {id:4,  title:'Levar para o comitê de crédito',                                                             owner:'João',                area:'credito',      dead:'31/07', dc:'ok',   s:2,e:3, checkpoint:false, deadlineGroup:'31/07'},
+  {id:5,  title:'Construção do regulamento',                                                                   owner:'Davi + Fabinho',      area:'estruturacao', dead:'31/07', dc:'ok',   s:2,e:3, checkpoint:false, deadlineGroup:'31/07'},
+  // 03/08
+  {id:7,  title:'Proposta da QiTech de ADM e Custódia',                                                       owner:'Luís',                area:'fornecedor',   dead:'03/08', dc:'ok',   s:3,e:4, checkpoint:false, deadlineGroup:'03/08'},
+  {id:8,  title:'Envio e preenchimento do link de contratação da consultora SP Capital',                       owner:'Rodrigo + Luís',      area:'estruturacao', dead:'03/08', dc:'ok',   s:3,e:4, checkpoint:false, deadlineGroup:'03/08'},
+  {id:6,  title:'Enviar para estruturação — reunião com Luís e Rodrigo',                                      owner:'Luís + Rodrigo',      area:'estruturacao', dead:'03/08', dc:'ok',   s:4,e:4, checkpoint:true,  deadlineGroup:'03/08'},
+  // 17/08
+  {id:9,  title:'Aprovação e registro do regulamento + aprovação do contrato de cessão',                       owner:'SP Capital + QiTech', area:'fornecedor',   dead:'17/08', dc:'ok',   s:5,e:5, checkpoint:false, deadlineGroup:'17/08'},
+  // 21/08
+  {id:11, title:'Cadastro dos cotistas e assinatura do termo de adesão',                                       owner:'Rodrigo',             area:'operacional',  dead:'21/08', dc:'ok',   s:6,e:6, checkpoint:false, deadlineGroup:'21/08'},
+  // 24/08
+  {id:12, title:'Implantação do fundo no sistema interno (parametrização do regulamento)',                     owner:'Rodrigo',             area:'operacional',  dead:'24/08', dc:'ok',   s:6,e:7, checkpoint:false, deadlineGroup:'24/08'},
+  // 26/08
+  {id:13, title:'Emissão de cotas (QiTech) — SLA ~5 dias úteis',                                              owner:'QiTech',              area:'fornecedor',   dead:'~26/08',dc:'ok',   s:6,e:7, checkpoint:false, deadlineGroup:'~26/08'},
+  // 27/08
+  {id:10, title:'Fluxo operacional e integração de sistemas (Formalização, Operação e Cobrança)',              owner:'Rodrigo',             area:'operacional',  dead:'27/08', dc:'ok',   s:5,e:7, checkpoint:false, deadlineGroup:'27/08'},
+  // 31/08
+  {id:14, title:'Cadastro dos fundos Solis no BTG e fundo de zeragem',                                        owner:'Originação',          area:'originacao',   dead:'31/08', dc:'ok',   s:7,e:7, checkpoint:false, deadlineGroup:'31/08'},
+  {id:15, title:'Primeiro aporte no fundo e compra dos DCs',                                                   owner:'Originação',          area:'originacao',   dead:'31/08+',dc:'ok',   s:7,e:8, checkpoint:false, deadlineGroup:'31/08'},
+];
+
+function renderCards(){
+  document.getElementById('cards').innerHTML=
+    '<div class="card"><div class="num">15</div><div class="lbl">entregáveis</div></div>'+
+    '<div class="card"><div class="num" style="color:#b32c2c">14/07</div><div class="lbl">crítico hoje</div></div>'+
+    '<div class="card"><div class="num">17/08</div><div class="lbl">registro regulamento</div></div>'+
+    '<div class="card"><div class="num">31/08</div><div class="lbl">go-live alvo</div></div>';
+}
+
+function renderGantt(){
+  var g=document.getElementById('gantt');
+  var lastGroup='';
+  ITEMS.forEach(function(item){
+    if(item.deadlineGroup!==lastGroup){
+      lastGroup=item.deadlineGroup;
+      // divider row spanning all cols
+      var div=document.createElement('div');
+      div.style.cssText='grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:10px 0 4px;margin-top:2px;display:grid;grid-template-columns:230px 80px repeat(8,1fr);gap:3px';
+      var inner=document.createElement('div');
+      inner.style.cssText='grid-column:1/-1;display:flex;align-items:center;gap:8px';
+      inner.innerHTML='<div style="flex:1;height:.5px;background:rgba(0,0,0,.1)"></div><div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap">Deadline '+item.deadlineGroup+'</div><div style="flex:1;height:.5px;background:rgba(0,0,0,.1)"></div>';
+      div.appendChild(inner);
+      g.appendChild(div);
+    }
+    var row=document.createElement('div');
+    row.className='grow';
+
+    var badge='';
+    if(item.dc==='crit') badge='<span class="badge badge-crit">hoje</span>';
+    if(item.checkpoint) badge='<span class="badge badge-cp">checkpoint</span>';
+
+    var meta=document.createElement('div');
+    meta.innerHTML='<div class="gname">'+item.title+'</div><div class="gowner"><span class="dot" style="background:'+C[item.area]+'"></span>'+item.owner+'</div>';
+    row.appendChild(meta);
+
+    var dead=document.createElement('div');
+    dead.className='gdead '+item.dc;
+    dead.innerHTML=item.dead+badge;
+    row.appendChild(dead);
+
+    for(var col=1;col<=8;col++){
+      var cell=document.createElement('div');
+      if(item.checkpoint && col===item.s){
+        cell.className='gcheckpoint';
+        cell.innerHTML='<div class="checkpoint-diamond"></div>';
+      } else if(!item.checkpoint && col>=item.s && col<=item.e){
+        var len=item.e-item.s;
+        var cls=len===0?'gbar':col===item.s?'gbar-s':col===item.e?'gbar-e':'gbar-m';
+        cell.className='gcell '+cls;
+        cell.style.background=C[item.area];
+      } else {
+        cell.className='gcell';
+      }
+      row.appendChild(cell);
+    }
+    g.appendChild(row);
+  });
+
+  var leg=document.getElementById('legend');
+  [['credito','Crédito'],['originacao','Originação'],['estruturacao','Estruturação'],['fornecedor','Fornecedores / QiTech'],['operacional','Operacional']].forEach(function(e){
+    leg.innerHTML+='<div class="leg"><div class="leg-color" style="background:'+C[e[0]]+'"></div>'+e[1]+'</div>';
+  });
+  leg.innerHTML+='<div class="leg"><div class="leg-diamond"></div>Checkpoint</div>';
+}
+
+var SK='fidc_spcapital_v3';
+function loadDone(){try{return JSON.parse(localStorage.getItem(SK)||'{}')}catch(e){return{}}}
+function saveDone(s){try{localStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+
+function renderTodos(){
+  var done=loadDone();
+  var list=document.getElementById('todos');
+  var lastGroup='';
+  ITEMS.forEach(function(item){
+    if(item.deadlineGroup!==lastGroup){
+      lastGroup=item.deadlineGroup;
+      var sec=document.createElement('div');
+      sec.className='todo-section';
+      sec.textContent='Deadline '+item.deadlineGroup;
+      list.appendChild(sec);
+    }
+    var isDone=!!done[item.id];
+    var card=document.createElement('div');
+    card.className='todo-card';
+    card.onclick=function(){toggleTodo(item.id)};
+    var deadLabel=item.dc==='crit'?'⚑ '+item.dead:item.dead;
+    var cpTag=item.checkpoint?'<span class="owner-tag cp-tag">checkpoint</span>':'';
+    card.innerHTML=
+      '<div class="todo-accent" id="acc-'+item.id+'" style="background:'+(isDone?'#2e7012':C[item.area])+'"></div>'+
+      '<div class="todo-row">'+
+        '<div class="todo-num">'+item.id+'</div>'+
+        '<div>'+
+          '<div class="todo-title'+(isDone?' done':'')+'" id="tt-'+item.id+'">'+item.title+'</div>'+
+          '<div class="todo-meta"><span class="owner-tag"><span class="dot" style="background:'+C[item.area]+'"></span>'+item.owner+'</span>'+cpTag+'</div>'+
+        '</div>'+
+        '<div class="todo-dead '+item.dc+'">'+deadLabel+'</div>'+
+        '<div class="chkbox'+(isDone?' done':'')+'" id="chk-'+item.id+'">'+
+          '<svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+        '</div>'+
+      '</div>';
+    list.appendChild(card);
+  });
+  updateProg();
+}
+
+function toggleTodo(id){
+  var done=loadDone();
+  done[id]=!done[id];
+  saveDone(done);
+  var isDone=done[id];
+  var item=ITEMS.find(function(i){return i.id===id});
+  document.getElementById('tt-'+id).className='todo-title'+(isDone?' done':'');
+  document.getElementById('chk-'+id).className='chkbox'+(isDone?' done':'');
+  document.getElementById('acc-'+id).style.background=isDone?'#2e7012':C[item.area];
+  updateProg();
+}
+
+function updateProg(){
+  var done=loadDone();
+  var n=Object.values(done).filter(Boolean).length;
+  document.getElementById('pfill').style.width=(n/ITEMS.length*100)+'%';
+  document.getElementById('plbl').textContent=n+' / '+ITEMS.length+' concluídos';
+}
+
+function show(id,btn){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
+  document.getElementById('v-'+id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  btn.classList.add('active');
+}
+
+renderCards();renderGantt();renderTodos();
+</script>
+</body>
+</html>
